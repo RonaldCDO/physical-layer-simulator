@@ -9,11 +9,11 @@ void AplicacaoTransmissora (void){
 
 }
 
-void CamadaDeAplicacaoTransmissora (std::string mensagem){
+// void CamadaDeAplicacaoTransmissora (std::string mensagem){
     //int quadro[];
 
     //CamadaFisicaTransmissora(quadro);
-}
+// }
 
 // void CamadaFisicaTransmissora(int quadro[]){
 //     int tipoDeCodificacao = 0;
@@ -47,15 +47,6 @@ void CamadaDeAplicacaoTransmissora (std::string mensagem){
 //     return output;
 // }
 
-// std::vector<int> teste (std::vector<int> input){
-//     std::vector<int> output = {1,2,3};
 
-//     int n = output.size();
-    
-//     for(int i =0; i< n; i++)
-//     std::cout<< output[i]<<std::endl;
-
-//     return output;
-// }
 
 
