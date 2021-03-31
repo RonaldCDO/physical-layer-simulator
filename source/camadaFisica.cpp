@@ -35,27 +35,27 @@ void CamadaDeAplicacaoTransmissora (std::string mensagem){
 
 // }
 
-// std::vector<int> strToBinary (std:: string input, std::vector<int> output){
-//     int n  = input.length();
-//     std::vector<int>::iterator it;
+std::vector<int> strToBinary (std:: string input, std::vector<int> output){
+    int n  = input.length();
+    std::vector<int>::iterator it;
 
-//     for(int i = 0; i< n; i++){
-//         it = output.begin();
-//         output.insert = std::bitset<8>(input[i]);
-//     }
+    for(int i = 0; i< n; i++){
+        it = output.begin();
+        output.insert = std::bitset<8>(input[i]);
+    }
     
-//     return output;
-// }
+    return output;
+}
 
-// std::vector<int> teste (std::vector<int> input){
-//     std::vector<int> output = {1,2,3};
+std::vector<int> teste (std::vector<int> input){
+    std::vector<int> output = {1,2,3};
 
-//     int n = output.size();
+    int n = output.size();
     
-//     for(int i =0; i< n; i++)
-//     std::cout<< output[i]<<std::endl;
+    for(int i =0; i< n; i++)
+    std::cout<< output[i]<<std::endl;
 
-//     return output;
-// }
+    return output;
+}
 
 
