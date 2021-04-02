@@ -76,6 +76,7 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
 }
 
 
+
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> quadro){
     return quadro;
 }
@@ -140,6 +141,7 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
 }
 
 
+
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
     std::vector<int> fluxoBrutoDeBits;
 
@@ -161,6 +163,7 @@ void CamadaDeAplicacaoReceptora (std::vector<int> fluxoBrutoDeBits){
 }
 
 void AplicacaoReceptora (std::string mensagem){
+
 
     std::cout<< "A mensagem recebida foi: " << mensagem << std::endl;
 }

@@ -34,3 +34,5 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> qua
 void CamadaDeAplicacaoReceptora (std::vector<int> fluxoBrutoDeBits);
 
 void AplicacaoReceptora (std::string mensagem);
+
+
