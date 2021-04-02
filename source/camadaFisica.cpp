@@ -54,7 +54,7 @@ void CamadaDeAplicacaoTransmissora (std::string mensagem){
 void CamadaFisicaTransmissora (std::vector<int> quadro){
 
     std::vector<int> fluxoBrutoDeBits;
-    int tipoDeCodificacao = 0;
+    int tipoDeCodificacao = 1;
 
     switch (tipoDeCodificacao){
         case 0:
@@ -84,8 +84,31 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> qu
 
 std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int> quadro){
     
-    
-    return quadro;
+    std::cout<< "-------------------------------------" << std::endl;
+
+    std::cout << "Utilizando a codificacao manchester para o conjunto: ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+    std::vector<int> teste = {0,1,0,1,0,0,1,1};
+
+    std::vector<int> retorno;
+    // tendo como referência um clock 01 01 01 01 01 01
+    for(int i = 0; i < quadro.size(); i++){
+        retorno.push_back((quadro[i] ^ 0));
+        retorno.push_back((quadro[i] ^ 1));
+    }
+
+    std::cout << "A codificacao manchester retornou o conjunto: ";
+    for(int i : retorno){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+    return retorno;
 }
 
 
@@ -113,7 +136,7 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
 void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 
-    int tipoDeCodificacao = 0;
+    int tipoDeCodificacao = 1;
     std::vector<int> fluxoBrutoDeBits, quadro;
 
     quadro = fluxoBrutoDeBitsPontoB;
@@ -143,9 +166,37 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
 
 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
+
+    std::cout<< "-------------------------------------" << std::endl;
+
     std::vector<int> fluxoBrutoDeBits;
 
-    return fluxoBrutoDeBits;
+    std::cout << "Utilizando decodificacao manchester para o conjunto: ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::vector<int> retorno;
+    // considerando um clock 01 01 01 01 01 01
+    for(int i = 0; i < quadro.size(); i+=2) {
+        if( !(quadro[i]|0) && quadro[i+1]&1 ){
+            retorno.push_back(0);
+        }else {
+            retorno.push_back(1);
+        }
+    }
+
+    std::cout << "A decodificacao manchester retornou o conjunto: ";
+    for(int i : retorno){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+
+    return retorno;
 }
 
 
