@@ -39,7 +39,7 @@ void AplicacaoTransmissora (void){
 
 std::string mensagem;
 std::cout<< "Digite uma mensagem: " <<std::endl;
-std::cin>> mensagem;
+std::getline(std::cin, mensagem);
 
 CamadaDeAplicacaoTransmissora(mensagem);
 
@@ -47,23 +47,14 @@ CamadaDeAplicacaoTransmissora(mensagem);
 
 void CamadaDeAplicacaoTransmissora (std::string mensagem){
     std::vector<int> quadro = BinaryConversor(mensagem);
-
     
     CamadaFisicaTransmissora(quadro);
 }
 
 void CamadaFisicaTransmissora (std::vector<int> quadro){
 
-    
-
     std::vector<int> fluxoBrutoDeBits;
     int tipoDeCodificacao = 0;
-
-    std::cout<<"quadro: ";
-    for(int i : quadro) 
-    std::cout<<quadro[i];
-    std::cout<<"\n";
-
 
     switch (tipoDeCodificacao){
         case 0:
@@ -86,12 +77,6 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
 
 
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> quadro){
-    
-    std::cout<<"quadro: ";
-    for(int i : quadro) 
-    std::cout<<quadro[i];
-    std::cout<<"\n";
-
     return quadro;
 }
 
@@ -112,32 +97,14 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
 
 void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
-    std::cout<<"fluxo: ";
-    for(int i : fluxoBrutoDeBits) 
-    std::cout<<fluxoBrutoDeBits[i];
-    std::cout<<"\n";
-
-
     std::vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
 
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
 
-    std::cout<<"fluxoA: ";
-    for(int i : fluxoBrutoDeBitsPontoA) 
-    std::cout<<fluxoBrutoDeBitsPontoA[i];
-    std::cout<<"\n";
 
-    std::cout<<"i: ";
-
-    for (int i : fluxoBrutoDeBitsPontoA){
-    fluxoBrutoDeBitsPontoB[i] = fluxoBrutoDeBitsPontoA[i];
+    for(int j = 0; j < fluxoBrutoDeBitsPontoA.size(); j++){
+        fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[j]);
     }
-
-    std::cout<<"\n";
-    std::cout<<"fluxoB: ";
-    for(int i : fluxoBrutoDeBitsPontoB) 
-    std::cout<<fluxoBrutoDeBitsPontoB[i];
-    std::cout<<"\n";
 
 
     CamadaFisicaReceptora (fluxoBrutoDeBitsPontoB);
@@ -148,10 +115,7 @@ void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
     int tipoDeCodificacao = 0;
     std::vector<int> fluxoBrutoDeBits, quadro;
 
-    for (int i : fluxoBrutoDeBitsPontoB)
-    quadro[i] = fluxoBrutoDeBitsPontoB[i];
-
-
+    quadro = fluxoBrutoDeBitsPontoB;
 
     switch (tipoDeCodificacao){
         case 0:
@@ -170,10 +134,7 @@ void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 
 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> quadro){
-    std::vector<int> fluxoBrutoDeBits;
-
-    for (int i : quadro)
-    fluxoBrutoDeBits[i] = quadro[i];
+    std::vector<int> fluxoBrutoDeBits = quadro;
 
     return fluxoBrutoDeBits;
 }
