@@ -1,5 +1,5 @@
 #Project Name	
-PROJ_NAME=physicalLayerSimulador
+PROJ_NAME=physicalLayerSimulator
 
 #.cpp Files
 CPP_SOURCE=$(wildcard ./source/*.cpp)
