@@ -102,8 +102,9 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
     std::vector<int> transfer;
 
     int aux = 0;
+    int n = quadro.size();
 
-    for (int i = 0 ; i < quadro.size() ;  i++){
+    for (int i = 0 ; i < n ;  i++){
         
         if(quadro[i] == 0){
 
@@ -114,8 +115,8 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
         }
         else if(aux % 2 == 0){
 
-                transfer.push_back(!(quadro[i] * 1));
-                transfer.push_back(!(quadro[i] * 0));
+                transfer.push_back(!(quadro[i] & 1));
+                transfer.push_back(!(quadro[i] & 0));
 
                 aux = 1;
             }
@@ -144,8 +145,9 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
 
+    int n = fluxoBrutoDeBitsPontoA.size();
 
-    for(int j = 0; j < fluxoBrutoDeBitsPontoA.size(); j++){
+    for(int j = 0; j < n; j++){
         fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[j]);
     }
 
@@ -188,7 +190,7 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
 
 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
-    std::vector<int> fluxoBrutoDeBits;
+    std::vector<int> fluxoBrutoDeBits = quadro;
 
     return fluxoBrutoDeBits;
 }
@@ -197,9 +199,9 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> quadro){
     
     std::vector<int> fluxoBrutoDeBits;
-
-
-    for(int i = 0; i<quadro.size(); i+=2){
+    int n = quadro.size();
+    
+    for(int i = 0; i < n; i+=2){
         if(quadro[i] == quadro [i+1]){
         fluxoBrutoDeBits.push_back(0);
         } else{
