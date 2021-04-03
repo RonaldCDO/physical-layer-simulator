@@ -96,8 +96,8 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
     std::vector<int> retorno;
     // tendo como referência um clock 01 01 01 01 01 01
     for(int i = 0; i < quadro.size(); i++){
-        retorno.push_back((quadro[i] ^ 0));
         retorno.push_back((quadro[i] ^ 1));
+        retorno.push_back((quadro[i] ^ 0));
     }
 
     std::cout << "A codificacao manchester retornou o conjunto: ";
@@ -181,9 +181,9 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
     // considerando um clock 01 01 01 01 01 01
     for(int i = 0; i < quadro.size(); i+=2) {
         if( !(quadro[i]|0) && quadro[i+1]&1 ){
-            retorno.push_back(0);
-        }else {
             retorno.push_back(1);
+        }else {
+            retorno.push_back(0);
         }
     }
 
