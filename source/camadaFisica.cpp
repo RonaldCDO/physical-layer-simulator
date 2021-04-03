@@ -61,8 +61,9 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
     std::cout<<"\n";
 
     std::vector<int> fluxoBrutoDeBits;
-    int tipoDeCodificacao = 2;
-    
+
+    int tipoDeCodificacao = 1;
+
 
     switch (tipoDeCodificacao){
         case 0:
@@ -92,8 +93,34 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> qu
 
 std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int> quadro){
     
-    
-    return quadro;
+    int n = quadro.size();
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+    std::cout << "Utilizando a codificacao manchester para o conjunto: ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+
+    std::vector<int> retorno;
+
+
+    for(int i = 0; i < n; i++){
+        retorno.push_back((quadro[i] ^ 1));
+        retorno.push_back((quadro[i] ^ 0));
+    }
+
+    std::cout << "A codificacao manchester retornou o conjunto: ";
+    for(int i : retorno){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+    return retorno;
 }
 
 
@@ -142,8 +169,10 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
 
     std::vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
-
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
+    int n = fluxoBrutoDeBitsPontoA.size();
+    
+
 
     int n = fluxoBrutoDeBitsPontoA.size();
 
@@ -157,7 +186,9 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
 void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 
-    int tipoDeCodificacao = 2;
+
+    int tipoDeCodificacao = 1;
+
     std::vector<int> fluxoBrutoDeBits, quadro;
 
 
@@ -190,9 +221,40 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
 
 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
-    std::vector<int> fluxoBrutoDeBits = quadro;
 
-    return fluxoBrutoDeBits;
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+    std::vector<int> fluxoBrutoDeBits;
+
+
+    std::cout << "Utilizando decodificacao manchester para o conjunto: ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::vector<int> retorno;
+    int n = quadro.size();
+
+    for(int i = 0; i < n; i+=2) {
+        if( !(quadro[i]|0) && quadro[i+1]&1 ){
+            retorno.push_back(1);
+        }else {
+            retorno.push_back(0);
+        }
+    }
+
+    std::cout << "A decodificacao manchester retornou o conjunto: ";
+    for(int i : retorno){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
+    std::cout<< "-------------------------------------" << std::endl;
+
+
+    return retorno;
 }
 
 
