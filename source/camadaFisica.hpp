@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <sstream>
 
+#define COD_BINARIA 0
+#define COD_MANCHESTER 1
+#define COD_BIPOLAR 2
+
 std::vector<int> BinaryConversor (std::string mensagem);
 
 std::string StringConversor (std::vector<int>);

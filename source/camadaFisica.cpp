@@ -1,6 +1,6 @@
 #include "camadaFisica.hpp"
 
-
+int COD_ESCOLHIDA = COD_BIPOLAR;
 
 std::vector<int> BinaryConversor (std::string mensagem){
 
@@ -54,7 +54,7 @@ void CamadaDeAplicacaoTransmissora (std::string mensagem){
 
 void CamadaFisicaTransmissora (std::vector<int> quadro){
 
-    std::cout<<"O quadro em binário a  ser codificado ->> ";
+    std::cout<<"O quadro em binario a  ser codificado --> ";
    
     for(int i : quadro)
     std::cout<<i;
@@ -62,7 +62,7 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
 
     std::vector<int> fluxoBrutoDeBits;
 
-    int tipoDeCodificacao = 1;
+    int tipoDeCodificacao = COD_ESCOLHIDA;
 
 
     switch (tipoDeCodificacao){
@@ -87,6 +87,14 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
 
 
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> quadro){
+
+    std::cout << std::endl;
+    std::cout << "Utilizando a codificacao binaria para o quadro --> ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
     return quadro;
 }
 
@@ -94,10 +102,9 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> qu
 std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int> quadro){
     
     int n = quadro.size();
+    std::cout << std::endl;
 
-    std::cout<< "-------------------------------------" << std::endl;
-
-    std::cout << "Utilizando a codificacao manchester para o conjunto: ";
+    std::cout << "Utilizando a codificacao manchester para o quadro --> ";
     for(int i : quadro){
         std::cout<< i;
     }
@@ -112,13 +119,12 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
         retorno.push_back((quadro[i] ^ 0));
     }
 
-    std::cout << "A codificacao manchester retornou o conjunto: ";
+    std::cout << "Codificacao manchester retornou o quadro --> ";
     for(int i : retorno){
         std::cout<< i;
     }
     std::cout << std::endl;
 
-    std::cout<< "-------------------------------------" << std::endl;
 
     return retorno;
 }
@@ -127,6 +133,13 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> quadro){
 
     std::vector<int> transfer;
+
+    std::cout << std::endl;
+    std::cout<<"Utilizando codificacao bipolar para o quadro --> ";
+   
+    for(int i : quadro)
+    std::cout<<i;
+    std::cout<<"\n";
 
     int aux = 0;
     int n = quadro.size();
@@ -156,10 +169,11 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
             }
     }
 
-    std::cout<<"Codificacao Bipolar->> ";
+    std::cout<<"Codificacao bipolar retornou --> ";
     for(int i : transfer)
     std::cout<<i;
 
+    std::cout<< std::endl;
 
     return transfer;
 }
@@ -183,7 +197,7 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 
 
-    int tipoDeCodificacao = 1;
+    int tipoDeCodificacao = COD_ESCOLHIDA;
 
     std::vector<int> fluxoBrutoDeBits, quadro;
 
@@ -211,6 +225,19 @@ void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> quadro){
     std::vector<int> fluxoBrutoDeBits = quadro;
 
+    std::cout << "Utilizando a decodificacao binaria para o quadro --> ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "A decodificacao binaria retornou --> ";
+    for(int i : quadro){
+        std::cout<< i;
+    }
+    std::cout << std::endl;
+
     return fluxoBrutoDeBits;
 }
 
@@ -219,12 +246,10 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
 
 
-    std::cout<< "-------------------------------------" << std::endl;
-
     std::vector<int> fluxoBrutoDeBits;
 
 
-    std::cout << "Utilizando decodificacao manchester para o conjunto: ";
+    std::cout << "Utilizando decodificacao manchester para o quadro --> ";
     for(int i : quadro){
         std::cout<< i;
     }
@@ -241,13 +266,12 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
         }
     }
 
-    std::cout << "A decodificacao manchester retornou o conjunto: ";
+    std::cout << std::endl;
+    std::cout << "A decodificacao manchester retornou o quadro --> ";
     for(int i : retorno){
         std::cout<< i;
     }
     std::cout << std::endl;
-
-    std::cout<< "-------------------------------------" << std::endl;
 
 
     return retorno;
@@ -258,6 +282,12 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> qua
     
     std::vector<int> fluxoBrutoDeBits;
     int n = quadro.size();
+
+    std::cout<<"Utilizando decodificacao bipolar para o quadro --> ";
+   
+    for(int i : quadro)
+    std::cout<<i;
+    std::cout<<"\n";
     
     for(int i = 0; i < n; i+=2){
         if(quadro[i] == quadro [i+1]){
@@ -268,7 +298,7 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> qua
 
     }
     std::cout<<"\n";
-    std::cout<<"Fluxo de bits decodificado->> ";
+    std::cout<<"Decodificacao bipolar retornou --> ";
     for(int i : fluxoBrutoDeBits)
     std::cout<<i;
     std::cout<<"\n";
