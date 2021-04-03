@@ -1,5 +1,5 @@
 # Name of the project
-PROJ_NAME=JVM
+PROJ_NAME=physicalLayerSimulator
  
 # .c files
 C_SOURCE=$(wildcard ./source/*.cpp)
