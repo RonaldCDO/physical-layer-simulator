@@ -84,6 +84,8 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> qu
 
 std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int> quadro){
     
+    int n = quadro.size();
+
     std::cout<< "-------------------------------------" << std::endl;
 
     std::cout << "Utilizando a codificacao manchester para o conjunto: ";
@@ -91,11 +93,12 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
         std::cout<< i;
     }
     std::cout << std::endl;
-    std::vector<int> teste = {0,1,0,1,0,0,1,1};
+
 
     std::vector<int> retorno;
-    // tendo como referência um clock 01 01 01 01 01 01
-    for(int i = 0; i < quadro.size(); i++){
+
+
+    for(int i = 0; i < n; i++){
         retorno.push_back((quadro[i] ^ 1));
         retorno.push_back((quadro[i] ^ 0));
     }
@@ -122,11 +125,11 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
 void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
     std::vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
-
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
+    int n = fluxoBrutoDeBitsPontoA.size();
+    
 
-
-    for(int j = 0; j < fluxoBrutoDeBitsPontoA.size(); j++){
+    for(int j = 0; j < n ; j++){
         fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[j]);
     }
 
@@ -178,8 +181,9 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
     std::cout << std::endl;
 
     std::vector<int> retorno;
-    // considerando um clock 01 01 01 01 01 01
-    for(int i = 0; i < quadro.size(); i+=2) {
+    int n = quadro.size();
+
+    for(int i = 0; i < n; i+=2) {
         if( !(quadro[i]|0) && quadro[i+1]&1 ){
             retorno.push_back(1);
         }else {
