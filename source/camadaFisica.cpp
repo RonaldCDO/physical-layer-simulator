@@ -171,10 +171,6 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
     std::vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
     int n = fluxoBrutoDeBitsPontoA.size();
-    
-
-
-    int n = fluxoBrutoDeBitsPontoA.size();
 
     for(int j = 0; j < n; j++){
         fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[j]);
