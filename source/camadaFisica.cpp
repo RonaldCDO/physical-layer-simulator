@@ -1,7 +1,9 @@
 #include "camadaFisica.hpp"
 
-int COD_ESCOLHIDA = COD_MANCHESTER;
+int COD_ESCOLHIDA = COD_BIPOLAR;
 
+//Conversão de string para um vetor de bits utilizando a função std::bitset 
+//para obter os bits da string
 std::vector<int> BinaryConversor (std::string mensagem){
 
     std::vector<int> fluxoBrutoDeBits;
@@ -14,6 +16,10 @@ std::vector<int> BinaryConversor (std::string mensagem){
 }
 
 
+//Método responsável pela conversão de vetor de inteiros com os valores binários para retornar a mensagem decodificada
+//Foi utilizado uma string temporária chamada temp que copiou os valores binários
+//e no último while a string foi varrida de forma a transformar o bitset
+// que a cada 8 bits foi transformado para a mensagem original
 std::string StringConversor (std::vector<int> fluxoBrutoDeBits){
     
     std::string temp;
@@ -35,23 +41,30 @@ return mensagem;
 }
     
 
+//Método responsável pela obtenção da mensagem a ser codificada por meio da digitação do usuário
 void AplicacaoTransmissora (void){
 
-    std::string mensagem;
-    std::cout<< "Digite uma mensagem: ";
-    std::getline(std::cin, mensagem);
-    std::cout<<"\n";
+std::string mensagem;
+std::cout<< "Digite uma mensagem: ";
+std::getline(std::cin, mensagem);
+std::cout<<"\n";
 
-    CamadaDeAplicacaoTransmissora(mensagem);
+CamadaDeAplicacaoTransmissora(mensagem);
 
 }
 
+//Método responsável pela convesão da string mensagem utilizando o método
+//BinaryConversor
 void CamadaDeAplicacaoTransmissora (std::string mensagem){
     std::vector<int> quadro = BinaryConversor(mensagem);
     
     CamadaFisicaTransmissora(quadro);
 }
 
+
+//Método responsável pela seleção de qual a codificação a ser utilizada
+//ao chamar o método que contém a codificação, esse retorna o quadro codificado
+//e o fluxoBrutoDeBits recebe o quadro codificado
 void CamadaFisicaTransmissora (std::vector<int> quadro){
 
     std::cout<<"O quadro em binario a  ser codificado --> ";
@@ -85,7 +98,8 @@ void CamadaFisicaTransmissora (std::vector<int> quadro){
 }
 
 
-
+//Método responsável pela codificação binária do quadro, como já houve a codificação para binário
+//esse método só retorna o quadro recebido
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> quadro){
 
     std::cout << std::endl;
@@ -99,6 +113,10 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBinaria (std::vector<int> qu
 }
 
 
+//Método responsável pela codificação manchester do quadro, para essa conversão, há uma varredura no vetor
+//que contém os bits do quadro, a cada bit do quadro faz-se uma comparação com um suposto clock que gera
+//o sinal 01, a codificação manchester utiliza o conceito lógico de XOR, na implementação foi usada o
+//o operador ^ que faz essa comparação lógica do quadro com o clock.
 std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int> quadro){
     
     int n = quadro.size();
@@ -110,13 +128,11 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
     }
     std::cout << std::endl;
 
-
     std::vector<int> retorno;
 
-    // supondo um clock 01 01 01 01
     for(int i = 0; i < n; i++){
-        retorno.push_back((quadro[i] ^ 0));
         retorno.push_back((quadro[i] ^ 1));
+        retorno.push_back((quadro[i] ^ 0));
     }
 
     std::cout << "Codificacao manchester retornou o quadro --> ";
@@ -130,6 +146,11 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
 }
 
 
+//Método responsável pela codificação bipolar do quadro, para essa conversão, há uma varredura no vetor
+//que contém os bits do quadro, a cada bit do quadro faz-se uma comparação com um suposto clock que gera
+//o sinal 01, a codificação bipolar utiliza o conceito de a cada bit da mensagem é feita a comparação com
+//o clock utilizando o operador AND no caso de o bit da mensagem ser 0 e os operadores AND e NAND para os
+//casos de 1, fazendo a convenção de 01 para Amplitude positiva e 10 para negativa
 std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> quadro){
 
     std::vector<int> transfer;
@@ -148,22 +169,19 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
         
         if(quadro[i] == 0){
 
-            transfer.push_back((quadro[i] & 1));
             transfer.push_back((quadro[i] & 0));
+            transfer.push_back((quadro[i] & 1));
 
+        } else if(aux % 2 == 0){
 
-        }
-        else if(aux % 2 == 0){
-
-                transfer.push_back(!(quadro[i] & 1));
-                transfer.push_back(!(quadro[i] & 0));
+                transfer.push_back((quadro[i] & 0));
+                transfer.push_back((quadro[i] & 1));
 
                 aux = 1;
-            }
-            else{
+            } else{
 
-                transfer.push_back(quadro[i] & 1);
-                transfer.push_back(quadro[i] & 0);
+                transfer.push_back(!(quadro[i] & 0));
+                transfer.push_back(!(quadro[i] & 1));
 
                 aux = 0;
             }
@@ -172,13 +190,13 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
     std::cout<<"Codificacao bipolar retornou --> ";
     for(int i : transfer)
     std::cout<<i;
-
     std::cout<< std::endl;
 
     return transfer;
 }
 
 
+//Método responsável pelo transporte do fluxoBrutoDeBits de um ponto A para um ponto B
 void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
 
 
@@ -194,36 +212,37 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
     CamadaFisicaReceptora (fluxoBrutoDeBitsPontoB);
 }
 
+
+//Método responsável por receber o fluxoBrutoDeBitsPontoB, transformar em quadro a ser decodificado
+//e transformado em fluxoDeBits 
 void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
 
 
     int tipoDeCodificacao = COD_ESCOLHIDA;
 
-    std::vector<int> fluxoBrutoDeBits, quadro;
-
-
+    std::vector<int> fluxoDeBits, quadro;
     quadro = fluxoBrutoDeBitsPontoB;
-
-     
 
     switch (tipoDeCodificacao){
         case 0:
-            fluxoBrutoDeBits = CamadaFisicaReceptoraDecodificacaoBinaria(quadro);
+            fluxoDeBits = CamadaFisicaReceptoraDecodificacaoBinaria(quadro);
             break;
         case 1:
-            fluxoBrutoDeBits = CamadaFisicaReceptoraDecodificacaoManchester(quadro);
+            fluxoDeBits = CamadaFisicaReceptoraDecodificacaoManchester(quadro);
             break;
         case 2:
-            fluxoBrutoDeBits = CamadaFisicaReceptoraDecodificacaoBipolar(quadro);
+            fluxoDeBits = CamadaFisicaReceptoraDecodificacaoBipolar(quadro);
             break;
     }
 
-    CamadaDeAplicacaoReceptora(fluxoBrutoDeBits);
+    CamadaDeAplicacaoReceptora(fluxoDeBits);
 }
 
 
+//Método responsável pela decodificação binária do quadro, como o quadro já possui os bits
+//originais da mensagem, o quadro só é repassado para o fluxoDeBits
 std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> quadro){
-    std::vector<int> fluxoBrutoDeBits = quadro;
+    std::vector<int> fluxoDeBits = quadro;
 
     std::cout << "Utilizando a decodificacao binaria para o quadro --> ";
     for(int i : quadro){
@@ -238,16 +257,16 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBinaria (std::vector<int> qua
     }
     std::cout << std::endl;
 
-    return fluxoBrutoDeBits;
+    return fluxoDeBits;
 }
 
 
-
+//Método responsável pela decodificação manchester do quadro, para essa decodificação, há uma varredura no vetor
+//que contém os bits do quadro, a cada par de bits do quadro faz-se uma comparação com o clock, no caso 
+//de o par de bits ser diferente dos bits do clock, retorna o valor 1, caso contrário, retorna 0 
 std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> quadro){
 
-
-    std::vector<int> fluxoBrutoDeBits;
-
+    std::vector<int> fluxoDeBits;
 
     std::cout << "Utilizando decodificacao manchester para o quadro --> ";
     for(int i : quadro){
@@ -255,33 +274,33 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
     }
     std::cout << std::endl;
 
-    std::vector<int> retorno;
     int n = quadro.size();
 
-    // supondo um clock 01 01 01 01
     for(int i = 0; i < n; i+=2) {
         if( !(quadro[i]|0) && quadro[i+1]&1 ){
-            retorno.push_back(0);
+            fluxoDeBits.push_back(1);
         }else {
-            retorno.push_back(1);
+            fluxoDeBits.push_back(0);
         }
     }
 
     std::cout << std::endl;
     std::cout << "A decodificacao manchester retornou o quadro --> ";
-    for(int i : retorno){
+    for(int i : fluxoDeBits){
         std::cout<< i;
     }
     std::cout << std::endl;
 
-
-    return retorno;
+    return fluxoDeBits;
 }
 
 
+//Método responsável pela decodificação bipolar do quadro, para essa decodificação, há uma varredura no vetor
+//que contém os bits do quadro, a cada par de bits do quadro codificado, faz-se uma comparação 1 pra 1, caso 
+//os bits forem iguais, retorna 0, se forem diferentes, retorna 1
 std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> quadro){
     
-    std::vector<int> fluxoBrutoDeBits;
+    std::vector<int> fluxoDeBits;
     int n = quadro.size();
 
     std::cout<<"Utilizando decodificacao bipolar para o quadro --> ";
@@ -292,29 +311,33 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoBipolar (std::vector<int> qua
     
     for(int i = 0; i < n; i+=2){
         if(quadro[i] == quadro [i+1]){
-        fluxoBrutoDeBits.push_back(0);
+        fluxoDeBits.push_back(0);
         } else{
-            fluxoBrutoDeBits.push_back(1);
+            fluxoDeBits.push_back(1);
         }
 
     }
     std::cout<<"\n";
     std::cout<<"Decodificacao bipolar retornou --> ";
-    for(int i : fluxoBrutoDeBits)
+    for(int i : fluxoDeBits)
     std::cout<<i;
     std::cout<<"\n";
 
 
-    return fluxoBrutoDeBits;
+    return fluxoDeBits;
 }
 
-void CamadaDeAplicacaoReceptora (std::vector<int> fluxoBrutoDeBits){
+
+//Método responsável por receber o fluxoDeBits e converter para a mensagem original
+void CamadaDeAplicacaoReceptora (std::vector<int> fluxoDeBits){
     
-    std::string mensagem = StringConversor(fluxoBrutoDeBits);
+    std::string mensagem = StringConversor(fluxoDeBits);
 
     AplicacaoReceptora (mensagem);
 }
 
+
+//Método responsável por exibir a mensagel original na tela
 void AplicacaoReceptora (std::string mensagem){
 
     std::cout << "\n";
