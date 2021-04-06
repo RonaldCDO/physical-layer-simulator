@@ -1,6 +1,6 @@
 #include "camadaFisica.hpp"
 
-int COD_ESCOLHIDA = COD_BIPOLAR;
+int COD_ESCOLHIDA = COD_MANCHESTER;
 
 std::vector<int> BinaryConversor (std::string mensagem){
 
@@ -37,12 +37,12 @@ return mensagem;
 
 void AplicacaoTransmissora (void){
 
-std::string mensagem;
-std::cout<< "Digite uma mensagem: ";
-std::getline(std::cin, mensagem);
-std::cout<<"\n";
+    std::string mensagem;
+    std::cout<< "Digite uma mensagem: ";
+    std::getline(std::cin, mensagem);
+    std::cout<<"\n";
 
-CamadaDeAplicacaoTransmissora(mensagem);
+    CamadaDeAplicacaoTransmissora(mensagem);
 
 }
 
@@ -113,10 +113,10 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoManchester (std::vector<int>
 
     std::vector<int> retorno;
 
-
+    // supondo um clock 01 01 01 01
     for(int i = 0; i < n; i++){
-        retorno.push_back((quadro[i] ^ 1));
         retorno.push_back((quadro[i] ^ 0));
+        retorno.push_back((quadro[i] ^ 1));
     }
 
     std::cout << "Codificacao manchester retornou o quadro --> ";
@@ -258,11 +258,12 @@ std::vector<int> CamadaFisicaReceptoraDecodificacaoManchester (std::vector<int> 
     std::vector<int> retorno;
     int n = quadro.size();
 
+    // supondo um clock 01 01 01 01
     for(int i = 0; i < n; i+=2) {
         if( !(quadro[i]|0) && quadro[i+1]&1 ){
-            retorno.push_back(1);
-        }else {
             retorno.push_back(0);
+        }else {
+            retorno.push_back(1);
         }
     }
 
