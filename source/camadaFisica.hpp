@@ -41,7 +41,7 @@ void CamadaDeAplicacaoTransmissora (std::string mensagem);
 
 /**
  * @brief Camada física transmissora
- * Reponsável reconhecer e executar a codificação escolhida para o quadro de bits
+ * Reponsável por reconhecer e executar a codificação escolhida para o quadro de bits
  * e encaminhá-lo para o meio de comunicação
  *
  * @param quadro Quadro de bits a ser codificado e encaminhado para o meio de comunicação
@@ -74,17 +74,18 @@ std::vector<int> CamadaFisicaTransmissoraCodificacaoBipolar (std::vector<int> qu
 
 /**
  * @brief Simula a transmissão dos dados por um meio
- * encaminha o quadro de bits para o ciclo de recepção da mensagem
+ * encaminha o quadro de bits para a camada de recepção da mensagem
  * @param fluxoBrutoDeBits quadro de bits a ser transmitido
  */
 void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits);
 
 /**
  * @brief Camada física receptora
- * Reponsável reconhecer e executar a decodificação escolhida para o quadro de bits
+ * Reponsável por reconhecer e executar a decodificação escolhida para o quadro de bits
  * e encaminhá-lo para a camada fisica receptora
  *
- * @param fluxoBrutoDeBitsPontoBdro Quadro de bits a ser decodificado e encaminhado para a camada fisica receptora
+ * @param fluxoBrutoDeBitsPontoB Quadro de bits a ser decodificado e encaminhado para a camada fisica receptora
+  @return quadro de bits a ser decodificado
  */
 void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB);
 
