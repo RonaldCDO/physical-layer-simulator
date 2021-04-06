@@ -1,7 +1,7 @@
 #include "camadaFisica.hpp"
 
 //Escolha da codificação a ser utilizada no algoritmo
-int COD_ESCOLHIDA = COD_BIPOLAR;
+int COD_ESCOLHIDA = COD_BINARIA;
 
 //Conversão de string para um vetor de bits utilizando a função std::bitset 
 //para obter os bits da string
