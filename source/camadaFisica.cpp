@@ -1,5 +1,5 @@
 #include "camadaFisica.hpp"
-#include "camadaEnlace.cpp"
+#include "camadaEnlace.hpp"
 
 //Escolha da codificação a ser utilizada no algoritmo
 int COD_ESCOLHIDA = COD_BINARIA;

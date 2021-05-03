@@ -5,7 +5,7 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
     CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 
-    CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
+    // CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
 
     CamadaFisicaTransmissora(quadro);
 }
@@ -29,19 +29,19 @@ void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres (std::vector<int> quadro){
-
+    return quadro;
 }
 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std::vector<int> quadro){
-
+    return quadro;
 }
 
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
     
     CamadaEnlaceDadosReceptoraDesenquadramento (quadro);
 
-    CamadaEnlaceDadosRepectoraControleDeErro (quadro);
+    // CamadaEnlaceDadosRepectoraControleDeErro (quadro);
 
     CamadaDeAplicacaoReceptora (quadro);
 }
@@ -65,5 +65,13 @@ void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
     }
 
     CamadaDeAplicacaoReceptora (quadroDesenquadrado);
+}
+
+std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro){
+    return quadro;
+}
+
+std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro) {
+    return quadro;
 }
     
