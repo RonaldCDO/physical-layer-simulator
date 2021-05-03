@@ -1,4 +1,5 @@
 #include "camadaFisica.hpp"
+#include "camadaEnlace.cpp"
 
 //Escolha da codificação a ser utilizada no algoritmo
 int COD_ESCOLHIDA = COD_BINARIA;
@@ -59,7 +60,7 @@ CamadaDeAplicacaoTransmissora(mensagem);
 void CamadaDeAplicacaoTransmissora (std::string mensagem){
     std::vector<int> quadro = BinaryConversor(mensagem);
     
-    CamadaFisicaTransmissora(quadro);
+    CamadaEnlaceDadosTransmissora(quadro);
 }
 
 
@@ -236,7 +237,7 @@ void CamadaFisicaReceptora (std::vector<int> fluxoBrutoDeBitsPontoB){
             break;
     }
 
-    CamadaDeAplicacaoReceptora(fluxoDeBits);
+    CamadaEnlaceDadosReceptora(fluxoDeBits);
 }
 
 
