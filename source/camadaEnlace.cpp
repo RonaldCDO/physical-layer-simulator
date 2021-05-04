@@ -7,7 +7,6 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
     // CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
 
-    CamadaFisicaTransmissora(quadro);
 }
 
 void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
@@ -25,6 +24,8 @@ void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
                 break;
     }
 
+    CamadaFisicaTransmissora(quadroEnquadrado);
+
 }
 
 
@@ -35,61 +36,39 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std::vector<int> quadro){
 
-    std::cout << "Utilizando insercao de bytes para o enquadramento" << std::endl;
+    std::cout << "Utilizando insercao de bytes para o enquadramento de ->";
+
+    for(int j : quadro) {
+        std::cout << j;
+    }
+    std::cout << std::endl;
 
     int numberOfBytes = quadro.size()/8;
-    std::vector<int> flag{5,5,5,5};
     std::vector<int> enquadrado;
 
     std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
 
     int count = 0;
-    for(std::vector<int> byte : bytes) {
-        std::cout << "O byte apresentado: ";
-
-        for(int i : byte) {
-            std::cout << i ;
-        }
-        std::cout << std::endl;
-
+    for(size_t i = 0; i < bytes.size(); i++) {
         if(count == 0) {
-            std::cout << "inicio" << std::endl;
-
             enquadrado.insert(enquadrado.end(), flag.begin(), flag.end());
         }
         
-        if(byte == flag) {
-            enquadrado.insert(enquadrado.end(), flag.begin(), flag.end());
+        if(bytes[i] == flag || bytes[i] == escape) {
+            enquadrado.insert(enquadrado.end(), escape.begin(), escape.end());
         }
-        enquadrado.insert(enquadrado.end(), byte.begin(), byte.end());
+        enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
 
-        if(count == 2) {
+        if(count == FRAME_SIZE) {
             enquadrado.insert(enquadrado.end(), flag.begin(), flag.end());
             count = 0;
-        } else {
+        } else if(i < bytes.size()) {
             count++;
-        }
-        std::cout << "Enquadramento: ";
-
-        for(int i : enquadrado) {
-            std::cout << i ;
-        }
-        std::cout << std::endl;
-        std::cout << count << std::endl;
-        
+        }        
     }
-    if(count < 2) {
+    if(count <= FRAME_SIZE) {
         enquadrado.insert(enquadrado.end(), flag.begin(), flag.end());
     }
-
-    std::cout << "Enquadramento final: ";
-
-        for(int i : enquadrado) {
-            std::cout << i ;
-        }
-        std::cout << std::endl;
-
-
     std::cout << "O quadro gerado: ";
 
     for(int i : enquadrado) {
@@ -99,8 +78,6 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std:
 
     return enquadrado;
 }
-
-
 
 std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes) {
     std::vector<std::vector<int>> bytes(numberOfBytes);
@@ -118,12 +95,12 @@ void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
 
     // CamadaEnlaceDadosRepectoraControleDeErro (quadro);
 
-    CamadaDeAplicacaoReceptora (quadro);
+    // CamadaDeAplicacaoReceptora (quadro);
 }
 
 
 void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
-    int tipoDeDesenquadramento = 0;
+    int tipoDeDesenquadramento = 1;
     std::vector<int> quadroDesenquadrado;
 
     switch (tipoDeDesenquadramento){
@@ -147,6 +124,36 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro) {
-    return quadro;
+    
+    std::cout << std::endl;
+    std::cout << "Utilizando insercao de bytes para o desenquadramento para o quadro -> ";
+    for(int j : quadro){
+        std::cout << j;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<int> desenquadrado;
+
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+    
+    int escaped = 0;
+    for(size_t i = 0; i < bytes.size() - 1; i++) {
+        if((bytes[i] != flag && bytes[i] != escape) || (escaped == 1)){
+            desenquadrado.insert(desenquadrado.end(), bytes[i].begin(), bytes[i].end());
+            escaped = 0;            
+        }
+        else if(bytes[i] == escape) {     
+            escaped = 1;
+        }
+    }
+    std::cout << "O desenquadramento retornou: ";
+
+    for(int i : desenquadrado) {
+        std::cout << i ;
+    }
+    std::cout << std::endl;
+
+    return desenquadrado;
 }
     
