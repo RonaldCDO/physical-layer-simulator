@@ -25,3 +25,5 @@ void CamadaEnlaceDadosRepectoraControleDeErro (std::vector<int> quadro);
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro);
+
+std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes);
