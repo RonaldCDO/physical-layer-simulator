@@ -5,6 +5,10 @@
 #include <vector>
 #include <bitset>
 
+#define FRAME_SIZE 2
+const std::vector<int> flag{0,1,1,1,1,1,1,0};
+const std::vector<int> escape{0,1,1,0,1,0,0,1};
+
 
 void CamadaEnlaceDadosTransmissora (std::vector<int> quadro);
 
@@ -25,3 +29,5 @@ void CamadaEnlaceDadosRepectoraControleDeErro (std::vector<int> quadro);
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro);
+
+std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes);
