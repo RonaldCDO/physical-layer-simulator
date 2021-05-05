@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <bitset>
+#include <math.h>
 
 #define FRAME_SIZE 2
 const std::vector<int> flag{0,1,1,1,1,1,1,0};
