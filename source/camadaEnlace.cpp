@@ -10,7 +10,7 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 }
 
 void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
-    int tipoDeEnquadramento = 1;
+    int tipoDeEnquadramento = 0;
     std::vector<int> quadroEnquadrado;
 
     switch (tipoDeEnquadramento){
@@ -30,7 +30,52 @@ void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres (std::vector<int> quadro){
-    return quadro;
+
+    std::cout << "Utilizando contagem de caracteres para o enquadramento de ->";
+
+    for(int j : quadro) {
+        std::cout << j;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    std::bitset<8> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
+
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
+    }
+    
+    std::vector<int> enquadrado;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+
+    int count = 0;
+    for(size_t i = 0; i < bytes.size(); i++) {
+
+        if(count == 0) {
+            enquadrado.insert(enquadrado.end(), numberOfBytesBin.begin(), numberOfBytesBin.end());
+        }
+        
+        if(count < FRAME_SIZE)
+        enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+       
+        std::cout<<"count: "<< count << std::endl; 
+        if(count == FRAME_SIZE && i < bytes.size()) {
+            enquadrado.insert(enquadrado.end(), numberOfBytesBin.begin(), numberOfBytesBin.end());
+            enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+            count = 1;
+        } else if(i < bytes.size()) {
+            count++;
+        }      
+    }
+    std::cout << "O quadro gerado: ";
+
+    for(int i : enquadrado) {
+        std::cout << i ;
+    }
+    std::cout << std::endl;
+
+    return enquadrado;
 }
 
 
@@ -44,6 +89,8 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std:
     std::cout << std::endl;
 
     int numberOfBytes = quadro.size()/8;
+    std::cout<<"numberOfBytes:";
+    std::cout<< numberOfBytes << std::endl;  
     std::vector<int> enquadrado;
 
     std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
@@ -100,7 +147,7 @@ void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
 
 
 void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
-    int tipoDeDesenquadramento = 1;
+    int tipoDeDesenquadramento = 0;
     std::vector<int> quadroDesenquadrado;
 
     switch (tipoDeDesenquadramento){
@@ -120,6 +167,7 @@ void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro){
+    
     return quadro;
 }
 
@@ -133,6 +181,9 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
     std::cout << std::endl;
 
     int numberOfBytes = quadro.size()/8;
+    std::cout<<"numberOfBytes:";
+    std::cout<< numberOfBytes << std::endl;
+
     std::vector<int> desenquadrado;
 
     std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
