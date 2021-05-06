@@ -30,7 +30,85 @@ void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres (std::vector<int> quadro){
-    return quadro;
+
+    std::cout << "Utilizando contagem de caracteres para o enquadramento de ->";
+
+    for(int j : quadro) {
+        std::cout << j;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    
+    std::vector<int> enquadrado;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+       
+    int count = 1;
+    for(size_t i = 0; i < bytes.size(); ){
+
+        if(FRAME_SIZE < 2){
+            std::cout<<"Não foi possível enquadrar, devido ao tamanho de quadros ser invalido." <<std::endl;
+            exit(1);
+        }
+
+        if(count == 1 && numberOfBytes == 0){
+        break;
+        }
+
+        if(count == 1 && FRAME_SIZE <= numberOfBytes){
+            
+            std::vector<int> frameSizeBin = IntToBinary(FRAME_SIZE);
+            enquadrado.insert(enquadrado.end(), frameSizeBin.begin(), frameSizeBin.end());
+        
+        } else if (FRAME_SIZE > numberOfBytes){
+            std::vector<int> frameSizeBin = IntToBinary(numberOfBytes +1);
+            enquadrado.insert(enquadrado.end(), frameSizeBin.begin(), frameSizeBin.end());
+        } 
+        
+        if(FRAME_SIZE <= numberOfBytes){
+
+            int temp = 0;
+
+            while (count != FRAME_SIZE){
+                if(i< bytes.size()){
+                enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+                count++;
+                temp++;
+                i++;
+                }
+            }
+        
+            numberOfBytes = numberOfBytes - temp;
+            count = 1;
+        
+        } else if (numberOfBytes < FRAME_SIZE){
+            
+            int temp = 0;
+            
+            while (count != (numberOfBytes + 1)){
+               if(i< bytes.size()){
+                enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+                count++;
+                temp++;
+                i++;
+               }
+                
+            }
+            
+            numberOfBytes = numberOfBytes - temp;
+            count = 1;
+
+        }
+    }
+
+    std::cout << "O quadro gerado: ";
+
+    for(int i : enquadrado) {
+        std::cout << i ;
+    }
+    std::cout << std::endl;
+
+    return enquadrado;
 }
 
 
@@ -89,6 +167,30 @@ std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBy
     return bytes;
 }
 
+std::vector<int> IntToBinary (int numberOfBytes){
+    std::bitset<8> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
+
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
+    }
+    return numberOfBytesBin;
+}
+
+int BinaryToInt (std::vector<int> binaryVector){
+    int number = 0;
+    int reverseIndex = 0;
+    int final = -1;
+        for (int i = binaryVector.size()- 1; i > final; i--){
+        if(binaryVector[i]!= 0){
+        number = number + pow(2, reverseIndex);
+        }
+        reverseIndex++;      
+    }
+    
+    return number;
+}
+
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
     
     CamadaEnlaceDadosReceptoraDesenquadramento (quadro);
@@ -120,7 +222,46 @@ void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro){
-    return quadro;
+
+    std::cout << "Utilizando contagem de caracteres para o desenquadramento  do quadro -> ";
+    for(int j : quadro){
+        std::cout << j;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<std::vector<int>> bytes = groupBytes (quadro, numberOfBytes);
+
+    int count = 1;
+    int size = 0;
+    std::vector<int> frameToRemove, desenquadrado;
+
+
+    for(size_t i = 0; i <  bytes.size(); )
+    {
+        if (count == 1 && i == 0){
+            frameToRemove.insert(frameToRemove.end(), bytes[i].begin(), bytes[i].end());
+            size = BinaryToInt(frameToRemove);
+            i++;
+        } else if (count != size){
+            desenquadrado.insert(desenquadrado.end(), bytes[i].begin(), bytes[i].end());
+            i++;
+            count++;
+        } else if( count == size){
+            count = 1;
+        }
+
+    }
+    
+    std::cout<<"O enquadramento retornou -> ";
+    for(int j : desenquadrado) {
+        std::cout << j ;
+    }
+    std::cout << std::endl;
+       
+    
+
+    return desenquadrado;
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro) {

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <bitset>
+#include <math.h>
 
 #define FRAME_SIZE 2
 const std::vector<int> flag{0,1,1,1,1,1,1,0};
@@ -79,3 +80,8 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
  * @return vetor de bytes
  */
 std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes);
+
+std::vector<int> IntToBinary (int numberOfBytes);
+
+int BinaryToInt (std::vector<int> binaryVector);
+
