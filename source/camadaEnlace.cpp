@@ -44,7 +44,7 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres 
     std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
        
     int count = 1;
-    for(size_t i = 0; i < bytes.size(); i++){
+    for(size_t i = 0; i < bytes.size(); ){
 
         if(FRAME_SIZE < 2){
             std::cout<<"Não foi possível enquadrar, devido ao tamanho de quadros ser invalido." <<std::endl;
@@ -70,9 +70,12 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres 
             int temp = 0;
 
             while (count != FRAME_SIZE){
+                if(i< bytes.size()){
                 enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
                 count++;
                 temp++;
+                i++;
+                }
             }
         
             numberOfBytes = numberOfBytes - temp;
@@ -83,10 +86,13 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres 
             int temp = 0;
             
             while (count != (numberOfBytes + 1)){
-               
+               if(i< bytes.size()){
                 enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
                 count++;
                 temp++;
+                i++;
+               }
+                
             }
             
             numberOfBytes = numberOfBytes - temp;
