@@ -39,34 +39,62 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres 
     std::cout << std::endl;
 
     int numberOfBytes = quadro.size()/8;
-    std::bitset<8> frameToBitsetConversor (numberOfBytes);
-    std::vector<int> numberOfBytesBin;
-
-    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
-    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
-    }
     
     std::vector<int> enquadrado;
     std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
-
-    int count = 0;
-    for(size_t i = 0; i < bytes.size(); i++) {
-
-        if(count == 0) {
-            enquadrado.insert(enquadrado.end(), numberOfBytesBin.begin(), numberOfBytesBin.end());
-        }
-        
-        if(count < FRAME_SIZE)
-        enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
        
-        if(count == FRAME_SIZE && i < bytes.size()) {
-            enquadrado.insert(enquadrado.end(), numberOfBytesBin.begin(), numberOfBytesBin.end());
-            enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+    int count = 1;
+    for(size_t i = 0; i < bytes.size(); i++){
+
+        if(FRAME_SIZE < 2){
+            std::cout<<"Não foi possível enquadrar, devido ao tamanho de quadros ser invalido." <<std::endl;
+            exit(1);
+        }
+
+        if(count == 1 && numberOfBytes == 0){
+        break;
+        }
+
+        if(count == 1 && FRAME_SIZE <= numberOfBytes){
+            
+            std::vector<int> frameSizeBin = IntToBinary(FRAME_SIZE);
+            enquadrado.insert(enquadrado.end(), frameSizeBin.begin(), frameSizeBin.end());
+        
+        } else if (FRAME_SIZE > numberOfBytes){
+            std::vector<int> frameSizeBin = IntToBinary(numberOfBytes +1);
+            enquadrado.insert(enquadrado.end(), frameSizeBin.begin(), frameSizeBin.end());
+        } 
+        
+        if(FRAME_SIZE <= numberOfBytes){
+
+            int temp = 0;
+
+            while (count != FRAME_SIZE){
+                enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+                count++;
+                temp++;
+            }
+        
+            numberOfBytes = numberOfBytes - temp;
             count = 1;
-        } else if(i < bytes.size()) {
-            count++;
-        }      
+        
+        } else if (numberOfBytes < FRAME_SIZE){
+            
+            int temp = 0;
+            
+            while (count != (numberOfBytes + 1)){
+               
+                enquadrado.insert(enquadrado.end(), bytes[i].begin(), bytes[i].end());
+                count++;
+                temp++;
+            }
+            
+            numberOfBytes = numberOfBytes - temp;
+            count = 1;
+
+        }
     }
+
     std::cout << "O quadro gerado: ";
 
     for(int i : enquadrado) {
@@ -133,6 +161,16 @@ std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBy
     return bytes;
 }
 
+std::vector<int> IntToBinary (int numberOfBytes){
+    std::bitset<8> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
+
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
+    }
+    return numberOfBytesBin;
+}
+
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
     
     CamadaEnlaceDadosReceptoraDesenquadramento (quadro);
@@ -164,61 +202,7 @@ void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro){
-
-    std::cout << std::endl;
-    std::cout << "Utilizando insercao de bytes para o desenquadramento para o quadro -> ";
-    for(int j : quadro){
-        std::cout << j;
-    }
-    std::cout << std::endl;
-
-    int numberOfBytes = quadro.size()/8;
-    int originalNumberOfBytes = 0;
-    int aux = 0;
-
-    std::cout<< "numberOfBytes: " << numberOfBytes <<std::endl;
-
-    while ( numberOfBytes > 1){
-        numberOfBytes = numberOfBytes/FRAME_SIZE;
-        aux++;
-        std::cout<<" aux: "<< numberOfBytes;    
-    }
-    std::cout<<std::endl;
-
-    originalNumberOfBytes = quadro.size()/8 - aux;
-
-    std::cout<< "originalNumberOfBytes: " << originalNumberOfBytes <<std::endl;
-
-    std::bitset<8> frameToBitsetConversor (originalNumberOfBytes);
-    std::vector<int> numberOfBytesBin;
-
-    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
-    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
-    }
-
-    std::cout<<std::endl;
-    for (int i : numberOfBytesBin)
-    std::cout <<i;
-    std::cout<<std::endl;
-    
-
-    std::vector<int> desenquadrado; 
-
-    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
-    
-    for(size_t i = 0; i < bytes.size(); i++) {
-        if(bytes[i] != numberOfBytesBin){
-            desenquadrado.insert(desenquadrado.end(), bytes[i].begin(), bytes[i].end());              
-        }
-    }
-    std::cout << "O desenquadramento retornou: ";
-
-    for(int i : desenquadrado) {
-        std::cout << i ;
-    }
-    std::cout << std::endl;
-
-    return desenquadrado;
+    return quadro;
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro) {
