@@ -205,11 +205,21 @@ void MeioDeComunicacao (std::vector<int> fluxoBrutoDeBits){
     std::vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
     int n = fluxoBrutoDeBitsPontoA.size();
-
+    int erro;
+    srand(time (NULL));
+    int percentErrTest = rand()%100 +1;
+    std::cout << "Porcentagem de Erro: " << percentErrTest << std::endl;
+    if (percentErrTest <= PORCENTAGEM_DE_ERRO){
     for(int j = 0; j < n; j++){
+        
         fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[j]);
-    }
-
+        
+        } 
+    } else {
+            for(int i = n; i > 0; i--)
+            fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[i]);
+        }
+     
 
     CamadaFisicaReceptora (fluxoBrutoDeBitsPontoB);
 }
