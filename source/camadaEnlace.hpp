@@ -71,7 +71,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
  */
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro);
 
-std::vector<int> CamadaEnlaceDadosRepectoraControleDeErro (std::vector<int> quadro);
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro);
 
