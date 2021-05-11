@@ -3,11 +3,12 @@
 
 void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
-    CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
+    std::vector<int> quadro2, quadro3;
+    quadro2 = CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 
-    CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
+    quadro3 = CamadaEnlaceDadosTransmissoraControleDeErro(quadro2);
 
-    CamadaFisicaTransmissora(quadro);
+    CamadaFisicaTransmissora(quadro3);
 
 
 }
@@ -216,7 +217,21 @@ switch (tipoDeControleDeErro){
 
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std::vector<int> quadro){
-    return quadro;
+    
+    std::vector<int> quadroChecado = quadro;
+
+    int count = 0;
+    int n = quadro.size();
+
+    for(int i = 0; i < n; i++){
+        if(quadro[i] == 1)
+        count++;
+    }
+        if (count % 2 == 1){
+        quadroChecado.push_back(1);
+        } else quadroChecado.push_back(0);
+
+    return quadroChecado;
 }
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro){
@@ -225,11 +240,12 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int
 
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
     
-    CamadaEnlaceDadosReceptoraDesenquadramento (quadro);
+    std::vector<int> quadro2, quadro3;
+    quadro2 =CamadaEnlaceDadosReceptoraControleDeErro (quadro);
 
-    CamadaEnlaceDadosReceptoraControleDeErro (quadro);
+    quadro3 = CamadaEnlaceDadosReceptoraDesenquadramento (quadro2);
 
-    CamadaDeAplicacaoReceptora (quadro);
+    CamadaDeAplicacaoReceptora (quadro3);
 }
 
 
@@ -353,7 +369,27 @@ switch (tipoDeControleDeErro){
 
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro){
-    return quadro;
+    
+    std::vector<int> quadroVerificado = quadro;
+
+    int bitParidade = quadroVerificado[quadro.size()-1];
+    quadroVerificado.pop_back();
+    for(int i : quadroVerificado)
+    std::cout << i;
+    std::cout <<std::endl;
+
+    int count = 0, n = quadroVerificado.size();
+
+    for (int i = 0; i< n; i++){
+        if (quadroVerificado[i] == 1){
+        count++;
+        }
+    }
+
+    if (count % 2 != bitParidade)
+        std::cout << "Erro detectado!" << std::endl;
+    
+    return quadroVerificado;
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> quadro){
