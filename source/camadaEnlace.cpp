@@ -5,11 +5,14 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
     CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 
-    // CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
+    CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
+
+    CamadaFisicaTransmissora(quadro);
+
 
 }
 
-void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
+std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
     int tipoDeEnquadramento = 1;
     std::vector<int> quadroEnquadrado;
 
@@ -23,9 +26,7 @@ void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
                 CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(quadro);
                 break;
     }
-
-    CamadaFisicaTransmissora(quadroEnquadrado);
-
+    return quadroEnquadrado;
 }
 
 
@@ -191,17 +192,48 @@ int BinaryToInt (std::vector<int> binaryVector){
     return number;
 }
 
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro){
+
+int tipoDeControleDeErro = 0;
+
+switch (tipoDeControleDeErro){
+
+    case 0 : quadro = CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (quadro);
+    break;
+
+    case 1 : quadro = CamadaEnlaceDadosTransmissoraControleDeErroCRC (quadro);
+    break;
+
+    default:
+    std::cout << "Verificação de erros invalida.";
+    break;
+
+    }
+
+    return quadro;
+}
+
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std::vector<int> quadro){
+    return quadro;
+}
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro){
+    return quadro;
+}
+
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
     
     CamadaEnlaceDadosReceptoraDesenquadramento (quadro);
 
-    // CamadaEnlaceDadosRepectoraControleDeErro (quadro);
+    CamadaEnlaceDadosReceptoraControleDeErro (quadro);
 
-    // CamadaDeAplicacaoReceptora (quadro);
+    CamadaDeAplicacaoReceptora (quadro);
 }
 
 
-void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
+std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
     int tipoDeDesenquadramento = 1;
     std::vector<int> quadroDesenquadrado;
 
@@ -218,7 +250,7 @@ void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
 
     }
 
-    CamadaDeAplicacaoReceptora (quadroDesenquadrado);
+    return quadroDesenquadrado;
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro){
@@ -297,4 +329,33 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
 
     return desenquadrado;
 }
-    
+
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro){
+
+int tipoDeControleDeErro = 0;
+
+switch (tipoDeControleDeErro){
+
+    case 0 : quadro = CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (quadro);
+    break;
+
+    case 1 : quadro = CamadaEnlaceDadosReceptoraControleDeErroCRC (quadro);
+    break;
+
+    default:
+    std::cout << "Verificação de erros invalida.";
+    break;
+
+    }
+    return quadro;
+}
+
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro){
+    return quadro;
+}
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> quadro){
+    return quadro;
+}

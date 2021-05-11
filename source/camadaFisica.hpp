@@ -5,10 +5,12 @@
 #include <bitset>
 #include <algorithm>
 #include <sstream>
+#include <time.h>
 
 #define COD_BINARIA 0
 #define COD_MANCHESTER 1
 #define COD_BIPOLAR 2
+#define PORCENTAGEM_DE_ERRO 10
 
 /**
  * @brief Converte string para vetor binário

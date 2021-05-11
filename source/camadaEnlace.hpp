@@ -26,11 +26,15 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro);
  *
  * @param quadro Conjunto de bits a ser enquadrado e encaminhado para o meio fisico
  */
-void CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro);
-
-void CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro);
+std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro);
 
 /**
  * @brief Implementa o enquadramento por insercao de bytes
@@ -55,9 +59,7 @@ void CamadaEnlaceDadosReceptora (std::vector<int> quadro);
  *
  * @param quadro Conjunto de bits a ser desenquadrado e encaminhado para a aplicacao
  */
-void CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro);
-
-void CamadaEnlaceDadosRepectoraControleDeErro (std::vector<int> quadro);
+std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres (std::vector<int> quadro);
 
@@ -68,6 +70,12 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
  * @return conjunto de bits desenquadrado
  */
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> quadro);
 
 /**
  * @brief Agrupa bytes
@@ -80,6 +88,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
  * @return vetor de bytes
  */
 std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes);
+
 
 std::vector<int> IntToBinary (int numberOfBytes);
 
