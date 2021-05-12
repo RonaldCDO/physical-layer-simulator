@@ -94,3 +94,7 @@ std::vector<int> IntToBinary (int numberOfBytes);
 
 int BinaryToInt (std::vector<int> binaryVector);
 
+int convertBinary(std::vector<int> bytes);
+
+std::vector<int> IntToBinary32 (int numberOfBytes);
+

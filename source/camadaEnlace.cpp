@@ -179,6 +179,16 @@ std::vector<int> IntToBinary (int numberOfBytes){
     return numberOfBytesBin;
 }
 
+std::vector<int> IntToBinary32 (int numberOfBytes){
+    std::bitset<32> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
+
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
+    }
+    return numberOfBytesBin;
+}
+
 int BinaryToInt (std::vector<int> binaryVector){
     int number = 0;
     int reverseIndex = 0;
@@ -196,7 +206,7 @@ int BinaryToInt (std::vector<int> binaryVector){
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 0;
+int tipoDeControleDeErro = 1;
 
 switch (tipoDeControleDeErro){
 
@@ -234,7 +244,48 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std:
     return quadroChecado;
 }
 
+int convertBinary(std::vector<int> bytes){
+    int decimal = 0;
+    int i, bin;
+    for(bin = 0, i = 7; i >= 0; i--, bin++){
+        decimal = decimal + (pow(2, bin) * bytes[i]);
+    }
+    return decimal;
+}
+
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro){
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+
+    std::cout << "Enviando para conversor" << std::endl;
+
+    uint32_t remainder = 0xffffffff;
+    for(int i = 0; i < numberOfBytes; i++){
+        int j;
+        uint32_t aux;
+        long transformed = convertBinary(bytes[i]);
+        
+        uint32_t partial = ((remainder >> 24) ^ transformed) & 255;
+        for(aux = partial << 24 , j=8; j>0; --j){             
+            if (aux & 0x80000000)
+            {
+                aux = (aux << 1) ^ 0x04c11db7;
+            }
+            else
+            {
+                aux = (aux << 1);
+            }
+        }
+        remainder = (remainder << 8) ^ aux;
+    }
+
+    std::vector<int> crcBits = IntToBinary32(remainder);
+    for(int w : crcBits) {
+        quadro.push_back(w);
+    }
+    std::cout << std::endl;
+
     return quadro;
 }
 
@@ -349,7 +400,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 0;
+int tipoDeControleDeErro = 1;
 
 switch (tipoDeControleDeErro){
 
@@ -393,5 +444,37 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::ve
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> quadro){
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+
+    uint32_t remainder = 0xffffffff;
+    for(int i = 0; i < numberOfBytes; i++){
+        int j;
+        uint32_t aux;
+        long transformed = convertBinary(bytes[i]);
+        
+        uint32_t partial = ((remainder >> 24) ^ transformed) & 255;
+        for(aux = partial << 24 , j=8; j>0; --j){             
+            if (aux & 0x80000000)
+            {
+                aux = (aux << 1) ^ 0x04c11db7;
+            }
+            else
+            {
+                aux = (aux << 1);
+            }
+        }
+        remainder = (remainder << 8) ^ aux;
+    }
+    int quadroSize = quadro.size();
+    for(int j = 0; j < quadroSize; j++){
+        if((quadroSize - j) <= 32){
+            quadro.pop_back();
+        }
+    }    
+    if (remainder != 0){
+        std::cout << "Verificacao de crc encontrou erro!!" << std::endl;
+    }
     return quadro;
 }
