@@ -36,6 +36,8 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std:
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro);
 
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(std::vector<int> quadro);
+
 /**
  * @brief Implementa o enquadramento por insercao de bytes
  *
@@ -76,6 +78,8 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quad
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro);
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> quadro);
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::vector<int> quadro);
 
 /**
  * @brief Agrupa bytes

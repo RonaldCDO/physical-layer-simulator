@@ -206,7 +206,7 @@ int BinaryToInt (std::vector<int> binaryVector){
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 1;
+int tipoDeControleDeErro = 2;
 
 switch (tipoDeControleDeErro){
 
@@ -216,6 +216,8 @@ switch (tipoDeControleDeErro){
     case 1 : quadro = CamadaEnlaceDadosTransmissoraControleDeErroCRC (quadro);
     break;
 
+    case 2: quadro = CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(quadro);
+    break;
     default:
     std::cout << "Verificação de erros invalida.";
     break;
@@ -287,6 +289,85 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int
     std::cout << std::endl;
 
     return quadro;
+}
+
+std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(std::vector<int> quadro) {
+
+    std::cout << std::endl;
+    std::cout << "Inserindo bits de paridade por hamming no quadro: ";
+    for(int i : quadro) {
+        std::cout << i ;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+
+    std::vector<int> quadroComParidade;
+
+    int j;
+    for(std::vector<int> byte : bytes){
+        // contador dos bits de paridade
+        int parity1 = 0;
+        int parity2 = 0;
+        int parity4 = 0;
+        int parity8 = 0;
+        for(j = 0; j < 8; j++){
+            switch (j)
+            {
+            case 0:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                break;
+            case 1:
+                parity1 += byte[j];
+                parity4 += byte[j];
+                break;        
+            case 2:
+                parity2 += byte[j];
+                parity4 += byte[j];
+                break;
+            case 3:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                parity4 += byte[j];
+                break;
+            case 4:
+                parity1 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 5:
+                parity2 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 6:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 7:
+                parity4 += byte[j];
+                parity8 += byte[j];
+                break;
+            default:
+                break;
+            }
+        }
+        byte.insert(byte.begin(), parity1%2);
+        byte.insert(byte.begin() + 1, parity2%2);
+        byte.insert(byte.begin() + 3, parity4%2);
+        byte.insert(byte.begin() + 7, parity8%2);
+        quadroComParidade.insert(quadroComParidade.end(), byte.begin(), byte.end());
+    }
+
+
+    std::cout << "Quadro gerado com bits de paridade: ";
+    for(int w : quadroComParidade) {
+        std::cout << w;
+    }
+    std::cout << std::endl << std::endl;
+
+    return quadroComParidade;
 }
 
 void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
@@ -364,7 +445,6 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std::vector<int> quadro) {
-    
     std::cout << std::endl;
     std::cout << "Utilizando insercao de bytes para o desenquadramento para o quadro -> ";
     for(int j : quadro){
@@ -400,7 +480,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 1;
+int tipoDeControleDeErro = 2;
 
 switch (tipoDeControleDeErro){
 
@@ -408,6 +488,9 @@ switch (tipoDeControleDeErro){
     break;
 
     case 1 : quadro = CamadaEnlaceDadosReceptoraControleDeErroCRC (quadro);
+    break;
+
+    case 2: quadro = CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(quadro);
     break;
 
     default:
@@ -476,5 +559,9 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> q
     if (remainder != 0){
         std::cout << "Verificacao de crc encontrou erro!!" << std::endl;
     }
+    return quadro;
+}
+
+std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::vector<int> quadro){
     return quadro;
 }
