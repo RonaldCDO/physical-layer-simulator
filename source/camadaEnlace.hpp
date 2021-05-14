@@ -102,3 +102,5 @@ int convertBinary(std::vector<int> bytes);
 
 std::vector<int> IntToBinary32 (int numberOfBytes);
 
+int ParityCounter (std::vector<int> quadroComParidade, int parityType);
+

@@ -505,7 +505,12 @@ switch (tipoDeControleDeErro){
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar (std::vector<int> quadro){
     
     std::vector<int> quadroVerificado = quadro;
+// std::vector<int> b = {1,0,1,1,1,1,0,0};
+    //int numberOfBytes = b.size()/8;
+    //std::vector<std::vector<int>> a = groupBytes(b, numberOfBytes);
 
+    int g = ParityCounter(b, 2);
+    std::cout <<"Teste: "<< g <<std::endl;
     int bitParidade = quadroVerificado[quadro.size()-1];
     quadroVerificado.pop_back();
     for(int i : quadroVerificado)
@@ -563,5 +568,162 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> q
 }
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::vector<int> quadro){
-    return quadro;
+
+    std::cout << std::endl;
+    std::cout << "Checando bits de paridade por hamming no quadro: ";
+    for(int i : quadro) {
+        std::cout << i ;
+    }
+    std::cout << std::endl;
+
+    int numberOfBytes = quadro.size()/8;
+    std::vector<std::vector<int>> bytes = groupBytes(quadro, numberOfBytes);
+
+    std::vector<int> quadroCorrigido;
+
+    int j;
+    for(std::vector<int> byte : bytes){
+        // contador dos bits de paridade
+        int parity1 = 0;
+        int parity2 = 0;
+        int parity4 = 0;
+        int parity8 = 0;
+
+        for(j = 0; j < 8; j++){
+            switch (j)
+            {
+            case 0:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                break;
+            case 1:
+                parity1 += byte[j];
+                parity4 += byte[j];
+                break;        
+            case 2:
+                parity2 += byte[j];
+                parity4 += byte[j];
+                break;
+            case 3:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                parity4 += byte[j];
+                break;
+            case 4:
+                parity1 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 5:
+                parity2 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 6:
+                parity1 += byte[j];
+                parity2 += byte[j];
+                parity8 += byte[j];
+                break;
+            case 7:
+                parity4 += byte[j];
+                parity8 += byte[j];
+                break;
+            default:
+                break;
+            }
+        }
+        int mistakeFound = -1;
+
+        if (ParityCounter(quadro, 1) == parity1%2){
+        byte.insert(byte.begin(), parity1%2);
+        } else{
+            mistakeFound += 1; 
+        }
+
+        if (ParityCounter(quadro, 2) == parity2%2){
+        byte.insert(byte.begin() + 1, parity2%2);
+        } else{
+            mistakeFound += 2; 
+        }
+
+        if (ParityCounter(quadro, 4) == parity4%2){
+        byte.insert(byte.begin() + 3, parity4%2);
+        } else{
+            mistakeFound += 4; 
+        }
+
+        if (ParityCounter(quadro, 8) == parity8%2){
+        byte.insert(byte.begin() + 7, parity8%2);
+        } else{
+            mistakeFound += 8; 
+        }
+
+        if (mistakeFound != 0){
+        quadroCorrigido.insert(quadroCorrigido.end(), byte.begin(), byte.end());
+        }
+    }
 }
+
+    int ParityCounter (std::vector<int> quadroComParidade, int parityType){
+        int count;
+
+        switch (parityType){
+        case 1:
+            for(size_t i=0; i<= quadroComParidade.size(); i +=2){
+                if(quadroComParidade[i] == 1){
+                count++;
+                
+                }
+            }
+        break;
+        
+        case 2:
+            for(size_t i=1; i<= quadroComParidade.size(); i+=3){
+                if(quadroComParidade[i] == 1)
+                count++;
+                if(quadroComParidade[i+1] == 1)
+                count++;
+            }
+        break;
+
+        case 4:
+            for(size_t i=3; i<= quadroComParidade.size(); i+=4){
+                if(quadroComParidade[i] == 1)
+                count++;
+                if(quadroComParidade[i+1] == 1)
+                count++;
+                if(quadroComParidade[i+2] == 1)
+                count++;
+                if(quadroComParidade[i+3] == 1)
+                count++;
+            }
+        break;
+
+        case 8:
+            for(size_t i=7; i<= quadroComParidade.size(); i+=8){
+                if(quadroComParidade[i] == 1)
+                count++;
+                if(quadroComParidade[i+1] == 1)
+                count++;
+                if(quadroComParidade[i+2] == 1)
+                count++;
+                if(quadroComParidade[i+3] == 1)
+                count++;
+                if(quadroComParidade[i+4] == 1)
+                count++;
+                if(quadroComParidade[i+5] == 1)
+                count++;
+                if(quadroComParidade[i+6] == 1)
+                count++;
+                if(quadroComParidade[i+7] == 1)
+                count++;
+            }
+        break;
+
+        default:
+            std::cout <<"Tipo invalido!"<< std::endl; 
+        break;
+    }
+
+
+        return (count%2);
+    }
+
