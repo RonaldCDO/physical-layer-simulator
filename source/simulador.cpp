@@ -1,5 +1,6 @@
 #include <iostream>
 #include "camadaFisica.hpp"
+#include "camadaEnlace.hpp"
 
 int main(){
 
