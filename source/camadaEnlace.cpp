@@ -4,16 +4,17 @@
 void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
     std::vector<int> quadro2, quadro3;
+
     quadro2 = CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 
     quadro3 = CamadaEnlaceDadosTransmissoraControleDeErro(quadro2);
 
     CamadaFisicaTransmissora(quadro3);
 
-
 }
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
+
     int tipoDeEnquadramento = 1;
     std::vector<int> quadroEnquadrado;
 
@@ -159,60 +160,6 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std:
     return enquadrado;
 }
 
-std::vector<std::vector<int>> GroupBytes(std::vector<int> quadro, int numberOfBytes) {
-    std::vector<std::vector<int>> bytes(numberOfBytes);
-    for(int i = 0; i < numberOfBytes; i++) {
-        for(int j = 0; j < 8; j++) {
-            bytes[i].push_back(quadro[i*8+j]);
-        }
-    }
-    return bytes;
-}
-
-std::vector<std::vector<int>> GroupTwelveBits(std::vector<int> quadro, int numberOfBytes) {
-    std::vector<std::vector<int>> bytes(numberOfBytes);
-    for(int i = 0; i < numberOfBytes; i++) {
-        for(int j = 0; j < 12; j++) {
-            bytes[i].push_back(quadro[i*12+j]);
-        }
-    }
-    return bytes;
-}
-
-std::vector<int> IntToBinary (int numberOfBytes){
-    std::bitset<8> frameToBitsetConversor (numberOfBytes);
-    std::vector<int> numberOfBytesBin;
-
-    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
-    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
-    }
-    return numberOfBytesBin;
-}
-
-std::vector<int> IntToBinary32 (int numberOfBytes){
-    std::bitset<32> frameToBitsetConversor (numberOfBytes);
-    std::vector<int> numberOfBytesBin;
-
-    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
-    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
-    }
-    return numberOfBytesBin;
-}
-
-int BinaryToInt (std::vector<int> binaryVector){
-    int number = 0;
-    int reverseIndex = 0;
-    int final = -1;
-        for (int i = binaryVector.size()- 1; i > final; i--){
-        if(binaryVector[i]!= 0){
-        number = number + pow(2, reverseIndex);
-        }
-        reverseIndex++;      
-    }
-    
-    return number;
-}
-
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro){
 
@@ -256,14 +203,6 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar (std:
     return quadroChecado;
 }
 
-int ConvertBinary(std::vector<int> bytes){
-    int decimal = 0;
-    int i, bin;
-    for(bin = 0, i = 7; i >= 0; i--, bin++){
-        decimal = decimal + (pow(2, bin) * bytes[i]);
-    }
-    return decimal;
-}
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int> quadro){
 
@@ -276,7 +215,7 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC (std::vector<int
     for(int i = 0; i < numberOfBytes; i++){
         int j;
         uint32_t aux;
-        long transformed = ConvertBinary(bytes[i]);
+        long transformed = ConvertBinaryToDecimal(bytes[i]);
         
         uint32_t partial = ((remainder >> 24) ^ transformed) & 255;
         for(aux = partial << 24 , j=8; j>0; --j){             
@@ -370,7 +309,6 @@ std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(std:
         quadroComParidade.insert(quadroComParidade.end(), byte.begin(), byte.end());
     }
 
-
     std::cout << "Quadro gerado com bits de paridade -> ";
     for(int w : quadroComParidade) {
         std::cout << w;
@@ -426,7 +364,6 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
     int size = 0;
     std::vector<int> frameToRemove, desenquadrado;
 
-
     for(size_t i = 0; i <  bytes.size(); )
     {
         if (count == 1 && i == 0){
@@ -449,8 +386,6 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoContagemDeCaracteres 
     }
     std::cout << std::endl;
        
-    
-
     return desenquadrado;
 }
 
@@ -545,7 +480,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC (std::vector<int> q
     for(int i = 0; i < numberOfBytes; i++){
         int j;
         uint32_t aux;
-        long transformed = ConvertBinary(bytes[i]);
+        long transformed = ConvertBinaryToDecimal(bytes[i]);
         
         uint32_t partial = ((remainder >> 24) ^ transformed) & 255;
         for(aux = partial << 24 , j=8; j>0; --j){             
@@ -581,12 +516,8 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::ve
     }
 
     int numberOfBytes = quadro.size()/12;
-    std::vector<std::vector<int>> bytes = GroupTwelveBits(quadro, numberOfBytes);
-
     std::vector<int> quadroCorrigido;
-
-
-
+    std::vector<std::vector<int>> bytes = Group12Bits(quadro, numberOfBytes);
     
     for (std::vector<int> quadroDeHamming : bytes)
     {
@@ -608,15 +539,9 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::ve
     quadroDeHamming.insert(quadroDeHamming.begin()+errorPos, !quadroDeHamming[errorPos]);
 
     quadroDeHamming.erase(quadroDeHamming.begin());
-
     quadroDeHamming.erase(quadroDeHamming.begin());
-
     quadroDeHamming.erase(quadroDeHamming.begin()+1);
-
     quadroDeHamming.erase(quadroDeHamming.begin()+4);
-
-  
-
     quadroCorrigido.insert(quadroCorrigido.end(), quadroDeHamming.begin(), quadroDeHamming.end());
 
     std::cout<<"A correcao de erros retornou -> ";
@@ -624,81 +549,143 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::ve
     std::cout<<f;
     std::cout<<std::endl; 
 
-
     }
-
   
     return quadroCorrigido;
     }
 
 
-    int ParityCounter (std::vector<int> quadroComParidade, int parityType){
-        int count = 0;
-        int paridade1 = 0, paridade2 = 1, paridade4 = 3, paridade8 = 7;
-        int n = quadroComParidade.size();
-        switch (parityType){
-        case 1:
-            for(int i=0; i<= n; i +=2){
-                if (i == paridade1){
-                } else if(quadroComParidade[i] == 1 ){
-                count++;
-                
-                }
-            }
-        break;
-        
-        case 2:
-            for(int i=1; i<= n; i+=4){
-                if (i == paridade2){
-                } else if(quadroComParidade[i] == 1)
-                count++;
-                if (quadroComParidade[i+1] == 1)
-                count++;
-            }
-        break;
+std::vector<int> IntToBinary (int numberOfBytes){
+    std::bitset<8> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
 
-        case 4:
-            for(int i = 3; i<= n; i+=8){
-                if(paridade4 == i){
-                }else if(quadroComParidade[i] == 1)
-                count++;
-                if(quadroComParidade[i+1] == 1)
-                count++;
-                if(quadroComParidade[i+2] == 1)
-                count++;
-                if(quadroComParidade[i+3] == 1)
-                count++;
-            }
-        break;
-
-        case 8:
-            for(int i=7; i<= n; i+=16){
-                if (i == paridade8){
-                } else if(quadroComParidade[i] == 1)
-                count++;
-                if(quadroComParidade[i+1] == 1)
-                count++;
-                if(quadroComParidade[i+2] == 1)
-                count++;
-                if(quadroComParidade[i+3] == 1)
-                count++;
-                if(quadroComParidade[i+4] == 1)
-                count++;
-                if(quadroComParidade[i+5] == 1)
-                count++;
-                if(quadroComParidade[i+6] == 1)
-                count++;
-                if(quadroComParidade[i+7] == 1)
-                count++;
-            }
-        break;
-
-        default:
-            std::cout <<"Tipo invalido!"<< std::endl; 
-        break;
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
     }
+    return numberOfBytesBin;
+}
 
+std::vector<int> IntToBinary32 (int numberOfBytes){
+    std::bitset<32> frameToBitsetConversor (numberOfBytes);
+    std::vector<int> numberOfBytesBin;
 
-        return (count%2);
+    for (int i = frameToBitsetConversor.size()-1 ; i >= 0; i--){
+    numberOfBytesBin.push_back (frameToBitsetConversor[i]);
     }
+    return numberOfBytesBin;
+}
 
+int BinaryToInt (std::vector<int> binaryVector){
+    int number = 0;
+    int reverseIndex = 0;
+    int final = -1;
+        for (int i = binaryVector.size()- 1; i > final; i--){
+        if(binaryVector[i]!= 0){
+        number = number + pow(2, reverseIndex);
+        }
+        reverseIndex++;      
+    }
+    
+    return number;
+}
+
+std::vector<std::vector<int>> GroupBytes(std::vector<int> quadro, int numberOfBytes) {
+    std::vector<std::vector<int>> bytes(numberOfBytes);
+    for(int i = 0; i < numberOfBytes; i++) {
+        for(int j = 0; j < 8; j++) {
+            bytes[i].push_back(quadro[i*8+j]);
+        }
+    }
+    return bytes;
+}
+
+std::vector<std::vector<int>> Group12Bits(std::vector<int> quadro, int numberOfBytes) {
+    std::vector<std::vector<int>> bytes(numberOfBytes);
+    for(int i = 0; i < numberOfBytes; i++) {
+        for(int j = 0; j < 12; j++) {
+            bytes[i].push_back(quadro[i*12+j]);
+        }
+    }
+    return bytes;
+}
+
+
+int ConvertBinaryToDecimal(std::vector<int> bytes){
+    int decimal = 0;
+    int i, bin;
+    for(bin = 0, i = 7; i >= 0; i--, bin++){
+        decimal = decimal + (pow(2, bin) * bytes[i]);
+    }
+    return decimal;
+}
+
+
+int ParityCounter (std::vector<int> quadroComParidade, int parityType){
+    int count = 0;
+    int paridade1 = 0, paridade2 = 1, paridade4 = 3, paridade8 = 7;
+    int n = quadroComParidade.size();
+    switch (parityType){
+    case 1:
+        for(int i=0; i<= n; i +=2){
+            if (i == paridade1){
+            } else if(quadroComParidade[i] == 1 ){
+            count++;
+            
+            }
+        }
+    break;
+    
+    case 2:
+        for(int i=1; i<= n; i+=4){
+            if (i == paridade2){
+            } else if(quadroComParidade[i] == 1)
+            count++;
+            if (quadroComParidade[i+1] == 1)
+            count++;
+        }
+    break;
+
+    case 4:
+        for(int i = 3; i<= n; i+=8){
+            if(paridade4 == i){
+            }else if(quadroComParidade[i] == 1)
+            count++;
+            if(quadroComParidade[i+1] == 1)
+            count++;
+            if(quadroComParidade[i+2] == 1)
+            count++;
+            if(quadroComParidade[i+3] == 1)
+            count++;
+        }
+    break;
+
+    case 8:
+        for(int i=7; i<= n; i+=16){
+            if (i == paridade8){
+            } else if(quadroComParidade[i] == 1)
+            count++;
+            if(quadroComParidade[i+1] == 1)
+            count++;
+            if(quadroComParidade[i+2] == 1)
+            count++;
+            if(quadroComParidade[i+3] == 1)
+            count++;
+            if(quadroComParidade[i+4] == 1)
+            count++;
+            if(quadroComParidade[i+5] == 1)
+            count++;
+            if(quadroComParidade[i+6] == 1)
+            count++;
+            if(quadroComParidade[i+7] == 1)
+            count++;
+        }
+    break;
+
+    default:
+        std::cout <<"Tipo invalido!"<< std::endl; 
+    break;
+}
+
+
+    return (count%2);
+}
