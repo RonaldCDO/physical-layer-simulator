@@ -1,4 +1,3 @@
-// #pragma once
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,6 +6,13 @@
 #include <math.h>
 
 #define FRAME_SIZE 2
+#define BIT_PARIDADE 0
+#define CRC 1
+#define HAMMING_CODE 2
+
+#define CONTAGEM_DE_CARACTERS 0
+#define INSERCAO_DE_BYTES 1
+
 const std::vector<int> flag{0,1,1,1,1,1,1,0};
 const std::vector<int> escape{0,1,1,0,1,0,0,1};
 

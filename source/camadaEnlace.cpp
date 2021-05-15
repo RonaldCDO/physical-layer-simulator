@@ -1,6 +1,9 @@
 #include "camadaEnlace.hpp"
 #include "camadaFisica.hpp"
 
+const int ENQUADRAMENTO_ESCOLHIDO = INSERCAO_DE_BYTES;
+const int CONTROLE_DE_ERRO_ESCOLHIDO = HAMMING_CODE;
+
 void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
     std::vector<int> quadro2, quadro3;
@@ -15,7 +18,7 @@ void CamadaEnlaceDadosTransmissora (std::vector<int> quadro){
 
 std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramento (std::vector<int> quadro){
 
-    int tipoDeEnquadramento = 1;
+    int tipoDeEnquadramento = ENQUADRAMENTO_ESCOLHIDO;
     std::vector<int> quadroEnquadrado;
 
     switch (tipoDeEnquadramento){
@@ -163,7 +166,7 @@ std::vector<int> CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes (std:
 
 std::vector<int> CamadaEnlaceDadosTransmissoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 2;
+int tipoDeControleDeErro = CONTROLE_DE_ERRO_ESCOLHIDO;
 
 switch (tipoDeControleDeErro){
 
@@ -330,7 +333,7 @@ void CamadaEnlaceDadosReceptora (std::vector<int> quadro){
 
 
 std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramento (std::vector<int> quadro){
-    int tipoDeDesenquadramento = 1;
+    int tipoDeDesenquadramento = ENQUADRAMENTO_ESCOLHIDO;
     std::vector<int> quadroDesenquadrado;
 
     switch (tipoDeDesenquadramento){
@@ -425,7 +428,7 @@ std::vector<int> CamadaEnlaceDadosReceptoraDesenquadramentoInsercaoDeBytes (std:
 
 std::vector<int> CamadaEnlaceDadosReceptoraControleDeErro (std::vector<int> quadro){
 
-int tipoDeControleDeErro = 2;
+int tipoDeControleDeErro = CONTROLE_DE_ERRO_ESCOLHIDO;
 
 switch (tipoDeControleDeErro){
 
@@ -544,12 +547,12 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::ve
     quadroDeHamming.erase(quadroDeHamming.begin()+4);
     quadroCorrigido.insert(quadroCorrigido.end(), quadroDeHamming.begin(), quadroDeHamming.end());
 
+    }
+    
     std::cout<<"A correcao de erros retornou -> ";
     for (int f : quadroCorrigido)
     std::cout<<f;
     std::cout<<std::endl; 
-
-    }
   
     return quadroCorrigido;
     }
@@ -685,7 +688,5 @@ int ParityCounter (std::vector<int> quadroComParidade, int parityType){
         std::cout <<"Tipo invalido!"<< std::endl; 
     break;
 }
-
-
     return (count%2);
 }
