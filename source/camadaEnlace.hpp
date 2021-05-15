@@ -91,14 +91,15 @@ std::vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(std::ve
  * 
  * @return vetor de bytes
  */
-std::vector<std::vector<int>> groupBytes(std::vector<int> quadro, int numberOfBytes);
+std::vector<std::vector<int>> GroupBytes(std::vector<int> quadro, int numberOfBytes);
 
+std::vector<std::vector<int>> GroupTwelveBits(std::vector<int> quadro, int numberOfBytes);
 
 std::vector<int> IntToBinary (int numberOfBytes);
 
 int BinaryToInt (std::vector<int> binaryVector);
 
-int convertBinary(std::vector<int> bytes);
+int ConvertBinary(std::vector<int> bytes);
 
 std::vector<int> IntToBinary32 (int numberOfBytes);
 

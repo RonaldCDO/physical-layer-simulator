@@ -5,6 +5,7 @@
 int main(){
 
     AplicacaoTransmissora();
-    
+
+
     return 0;
 }
