@@ -2,7 +2,7 @@
 #include "camadaEnlace.hpp"
 
 //Escolha da codificação a ser utilizada no algoritmo
-int COD_ESCOLHIDA = COD_BINARIA;
+const int COD_ESCOLHIDA = COD_BINARIA;
 
 //Conversão de string para um vetor de bits utilizando a função std::bitset 
 //para obter os bits da string

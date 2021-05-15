@@ -1,4 +1,3 @@
-// #pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,7 +9,7 @@
 #define COD_BINARIA 0
 #define COD_MANCHESTER 1
 #define COD_BIPOLAR 2
-#define PORCENTAGEM_DE_ERRO 0.5
+#define PORCENTAGEM_DE_ERRO 0
 
 /**
  * @brief Converte string para vetor binário
